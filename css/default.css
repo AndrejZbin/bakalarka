@@ -1,0 +1,28 @@
+body {
+	font-family: Calibri;
+	margin: 0;
+	padding: 0;
+	overflow: auto;
+	background-color: #f2f2f2;
+}
+
+body header {
+	font-size: 1em;	
+	margin-top: -22px;
+	border-radius: 0 0 15px 15px; 
+	height: 50px;
+	text-align: center;
+	color: #DCDCDC;
+	background-color: #1a1a1a;
+
+}
+
+section {
+	padding-left: 10px;
+	padding-right: 10px;
+	overflow: auto;
+}
+
+aside {
+	float: left;
+}

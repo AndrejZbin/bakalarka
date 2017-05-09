@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="sk">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="css/default.css">
+		<link rel="stylesheet" type="text/css" href="css/editor.css">
+		<link rel="stylesheet" type="text/css" href="css/world.css">
+		<link rel="stylesheet" type="text/css" href="css/task.css">		
+        
+        <link rel="icon" href="css/roboticon.png">
+                
+        <script src="bag.js" type="text/javascript" charset="utf-8"></script>
+        <script src="robot.js" type="text/javascript" charset="utf-8"></script>
+        <script src="world.js" type="text/javascript" charset="utf-8"></script>
+        <script src="language.js" type="text/javascript" charset="utf-8"></script>
+        <script src="interpreter.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mainloop.js" type="text/javascript" charset="utf-8"></script>
+        <script src="scene.js" type="text/javascript" charset="utf-8"></script>
+        <script src="buttons.js" type="text/javascript" charset="utf-8"></script>        
+        
+        <script src="levels/level.js" type="text/javascript" charset="utf-8"></script>
+        <script src="levels/level-sandbox.js" type="text/javascript" charset="utf-8"></script>
+        <script src="levels/level-tutorial.js" type="text/javascript" charset="utf-8"></script>
+        <script src="levels/level-repeat.js" type="text/javascript" charset="utf-8"></script>
+        <script src="levels/level-if.js" type="text/javascript" charset="utf-8"></script>
+        <script src="levels/level-while.js" type="text/javascript" charset="utf-8"></script>
+        <script src="levels/level-call.js" type="text/javascript" charset="utf-8"></script>
+        <script src="levels/level-variable.js" type="text/javascript" charset="utf-8"></script>
+        <script src="levels/level-recursion.js" type="text/javascript" charset="utf-8"></script>
+        
+        
+		<script src="awesomefont/main.js"></script>
+        <script src="three-js/three.js" type="text/javascript" charset="utf-8"></script>  
+        <script src="three-js/stats.js" type="text/javascript" charset="utf-8"></script>    
+        <script src="jquery/jquery.js" type="text/javascript" charset="utf-8"></script>          
+       
+		<title>Robot</title>
+	</head>
+	<body>
+		<header>
+				<h1>Robot</h1>
+		</header>
+		<section>			
+        <!-- Task -->
+			<div id="task">
+				<h2>Aktuálne zadanie</h2>
+				<p id="tasktext">
+                Nachádzaš sa vo voľnom svete, kde si môžeš vyskúšať príkazy. <br>
+                Ak chceš vyskúsať riešiť úlohy, prejdi na koniec stránky a nejakú si vyber.
+				</p>	
+			</div>
+			<!-- Editor -->
+			<div id="editor-container">	
+				<div id="editor-panel">
+                    <button type="button" disabled id="build_button" title="Priprav"><i class="fa fa-check " aria-hidden="true"></i></button>
+                    <button type="button" disabled id="step_button" title="Vykonaj nasledujúcu inštrukciu"><i class="fa fa-step-forward" aria-hidden="true"></i></button>
+					<button type="button" disabled id="run_button" title="Spusti"><i class="fa fa-play" aria-hidden="true"></i></button>
+					<button type="button" disabled id="pause_button" title="Pozastav"><i class="fa fa-pause" aria-hidden="true"></i></button>
+                    <button type="button" disabled id="restart_button" title="Odznova"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+					<button type="button" disabled id="stop_button" title="Zastav"><i class="fa fa-stop" aria-hidden="true"></i></button>
+					
+				</div>
+				<div id="editor"></div>
+			</div>
+			<!-- World -->
+			<div id="world-container">
+			</div>			
+			
+		</section>
+			
+		<script src="ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+        <script src="ace/src-noconflict/mode-robot.js" type="text/javascript" charset="utf-8"></script>
+        <script src="ace/src-noconflict/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+            var build_button = document.getElementById("build_button"); build_button.disabled=true;
+            var step_button = document.getElementById("step_button"); step_button.disabled=true;
+            var run_button = document.getElementById("run_button"); run_button.disabled=true;
+            var pause_button = document.getElementById("pause_button"); pause_button.disabled=true;
+            var restart_button = document.getElementById("restart_button"); restart_button.disabled=true;
+            var stop_button = document.getElementById("stop_button"); stop_button.disabled=true;
+
+			var editor = ace.edit("editor");
+            editor.deleteMarker = function () {
+                if (editor.marker!=undefined) {
+                    editor.getSession().removeMarker(editor.marker);
+                    editor.marker=undefined;
+                }
+            }
+            editor.getSession().on('change', function() {
+                editor.deleteMarker();
+                });
+			editor.setTheme("ace/theme/tomorrow");
+			editor.session.setMode("ace/mode/robot");          
+            editor.$blockScrolling = Infinity
+            editor.setOptions({
+                enableBasicAutocompletion: true,
+            });    
+            var world = new World();
+            var robot = new Robot();            
+            var level = new LevelSandbox();
+            level.build(world, robot);
+            interpreter = new Interpreter(robot, world);
+            var executor = new Executor(interpreter); 
+		</script>
+        
+        <aside>
+            <h2>Úlohy</h2>
+            <div id="tutorial">
+                <h3>Základné príkazy</h3>
+                <button type="button" class="levelButton" title="Pieskovisko" onclick="level = new LevelSandbox(); level.start();">Pieskovisko</button>
+                <button type="button" class="levelButton" title="Krok" onclick="level = new LevelTutorialStep(); level.start();">Príkaz krok</button>
+                <button type="button" class="levelButton" title="Otoc" onclick="level = new LevelTutorialTurn(); level.start();">Príkaz otoč</button>
+                <button type="button" class="levelButton" title="Zober" onclick="level = new LevelTutorialPick(); level.start();">Príkaz zober</button>
+                <button type="button" class="levelButton" title="Poloz" onclick="level = new LevelTutorialPlace(); level.start();">Príkaz polož</button>
+                <button type="button" class="levelButton" title="Obľúbená farba" onclick="level = new LevelTutorialColorReplace(); level.start();">Obľúbená farba</button>
+                <button type="button" class="levelButton" title="Zbieranie políčok" onclick="level = new LevelTutorialCollect(); level.start();">Zbieranie políčok</button>
+                <button type="button" class="levelButton" title="Premiestenie políčok" onclick="level = new LevelTutorialSwap(); level.start();">Premiestenie políčok</button>
+                <button type="button" class="levelButton" title="Schody" onclick="level = new LevelTutorialStairs(); level.start();">Schody</button>
+                <button type="button" class="levelButton" title="Schody naopak" onclick="level = new LevelTutorialReverseStairs(); level.start();">Schody naopak</button>
+                <h3>Cyklus OPAKUJ</h3>
+                <button type="button" class="levelButton" title="Opakuj krok" onclick="level = new LevelRepeatStep(); level.start();">Opakuj krok</button>
+                <button type="button" class="levelButton" title="Zober a krok" onclick="level = new LevelRepeatStepPlace(); level.start();">Zober a krok</button>
+                <button type="button" class="levelButton" title="Zober viac a krok" onclick="level = new LevelRepeatStepRepeatPlace(); level.start();">Zober viac a krok</button>
+                <button type="button" class="levelButton" title="Správne miesto" onclick="level = new LevelRepeatStepTurn(); level.start();">Správne miesto</button>
+                <button type="button" class="levelButton" title="Vyčisti okruh" onclick="level = new LevelRepeatStepPlaceTurn(); level.start();">Vyčisti okruh</button>
+                <h3>Podmienka AK</h3>
+                <button type="button" class="levelButton" title="Ak tak" onclick="level = new LevelIfCollect(); level.start();">Ak tak</button>
+                <button type="button" class="levelButton" title="Po ceste" onclick="level = new LevelIfNavigate(); level.start();">Po ceste</button>
+                <button type="button" class="levelButton" title="Po ceste 2" onclick="level = new LevelIfElse(); level.start();">Po ceste 2</button>
+                <h3>Cyklus POKIAL</h3>
+                <button type="button" class="levelButton" title="Znova zbieraj" onclick="level = new LevelWhileCollect(); level.start();">Znova zbieraj</button>
+                <button type="button" class="levelButton" title="Prelez" onclick="level = new LevelWhileGetOver(); level.start();">Prelez</button>
+                <h3>Vlastné príkazy</h3>
+                <button type="button" class="levelButton" title="Zbieraj v rohoch" onclick="level = new LevelCallTurnWalkPick(); level.start();">Zbieraj v rohoch</button>
+                <button type="button" class="levelButton" title="Prelez 2" onclick="level = new LevelCallGetOver(); level.start();">Prelez 2</button>
+                <h3>Premenné</h3>
+                <button type="button" class="levelButton" title="Veža" onclick="level = new LevelVarTower(); level.start();">Veža</button>
+                <button type="button" class="levelButton" title="Schody" onclick="level = new LevelVarStairs(); level.start();">Schody</button>
+                <button type="button" class="levelButton" title="Schody pomocou funkcie" onclick="level = new LevelVarStairsParams(); level.start();">Schody pomocou funkcie</button>
+                <h3>Rekurzia</h3>
+                <button type="button" class="levelButton" title="Schody pomocou funkcie" onclick="level = new LevelRecursionStairs(); level.start();">Schody pomocou rekuzie</button>
+                <button type="button" class="levelButton" title="Prechádzka" onclick="level = new LevelRecursionWalk(); level.start();">Prechádzka</button>
+            </div>
+		</aside>
+		
+	</body>
+</html>

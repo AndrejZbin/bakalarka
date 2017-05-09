@@ -1,0 +1,89 @@
+#editor-container {
+	border: 1px solid #DCDCDC;
+	width: calc(40vw - 10px); 
+	height: 80vh;
+	position: relative;
+	overflow: hidden;
+	/*background-color: #DCDCDC;*/
+	background-color: white;
+	/*min-width: 216px;*/
+	margin-top: 22px;
+	margin-bottom: 10px;
+	float: left;
+}
+
+#editor {
+	height: calc(100% - 35px);
+	width: 100%;
+	font-size: 1em;
+	position: absolute;
+	top: 35px;
+}
+
+#editor-panel button {
+	width: 50px;
+	height: 25px;
+	margin: 2px;
+	margin-bottom: 5px;
+	margin-top: 5px;
+	padding: 0;
+	border-radius: 6px;
+	border-width: 0;	
+	background-color: #F6F6F6;
+	border: 1px solid grey;
+	float: left;
+}
+
+#editor-panel button:hover {
+	border: 3px solid;
+}
+
+#editor-panel button:active {
+	background-color: white;
+}
+
+#editor-panel #build_button:hover:enabled {
+	color: green;
+}
+
+#editor-panel #run_button:hover:enabled {
+	color: green;
+}
+
+#editor-panel #pause_button:hover:enabled {
+	color: #b3b300;
+}
+
+#editor-panel #stop_button:hover:enabled {
+	color: #990000;
+}
+
+#editor-panel #restart_button:hover:enabled {
+	color: #00ff00;
+}
+
+#editor-panel #step_button:hover:enabled {
+	color: #0033cc;
+}
+
+.ace_selected_word {
+  position:absolute;
+  background:rgba(100,200,100,0.5);
+  z-index:20
+}
+
+.ace_error_command {
+  position:absolute;
+  background:rgba(200,100,100,0.5);
+  z-index:20
+}
+
+.ace_warning {
+  position:absolute;
+  background:rgba(255,250,155,0.5);
+  z-index:20
+}
+
+:disabled {
+    color: #DDDDDD;
+}
