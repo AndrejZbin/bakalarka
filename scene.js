@@ -43,7 +43,6 @@ function Scene(robot, world, startFunction) {
     }.bind(this));
     loader.load('models/robot.json', function ( geometry, materials ) {
         this.robot.geometry = geometry;
-        console.log(materials);
         this.robot.materials = materials;
         this.robot.createMesh(this.scene);
         this.robot.loaded=true;
@@ -55,7 +54,6 @@ function Scene(robot, world, startFunction) {
         'skybox/arrakisday_rt.jpg',         'skybox/arrakisday_lf.jpg'
          ];
     var textureCube = new THREE.CubeTextureLoader().load( urls, function(texture) {
-        console.log('helllo');
         shader = THREE.ShaderLib[ "cube" ];
         shader.uniforms[ "tCube" ].value = texture;
         
