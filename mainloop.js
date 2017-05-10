@@ -15,13 +15,16 @@ function Executor(interpreter) {
     this.nextAction = false; //robim nieco teraz
     this.currentAction= false; //mam robit nieco dalej?
     this.steps = false; //krokovanie programu
-    this.animSpeed = 1; //rychlost animacie, menej=rychlejsie       
+    this.animSpeed = 1; //rychlost animacie, menej=pomalsie       
+    
+    this.clock = new THREE.Clock();
     
     this.scene = new Scene(this.interpreter.robot, this.interpreter.world, function() {
         build_button.disabled=false;
+        speed_slider.disabled=false;
         var currentTime = Date.now();
         var speed = this.animSpeed;
-        this.currentAnimation = new AnimationInfo('standing', currentTime, currentTime + this.interpreter.robot.animationLength('standing')*speed); 
+        this.currentAnimation = new AnimationInfo('standing', currentTime, currentTime + this.interpreter.robot.animationLength('standing')/speed); 
         this.interpreter.robot.playAnimation('standing', speed);
         this.mainLoop();
     }.bind(this));
@@ -35,7 +38,7 @@ Executor.prototype.restart = function() {
     this.interpreter.robot.stopAnimation(this.currentAnimation.anim);
     var currentTime = Date.now();
     var speed = this.animSpeed;
-    this.currentAnimation = new AnimationInfo('standing', currentTime, currentTime + this.interpreter.robot.animationLength('standing')*speed); 
+    this.currentAnimation = new AnimationInfo('standing', currentTime, currentTime + this.interpreter.robot.animationLength('standing')/speed); 
     this.interpreter.robot.playAnimation('standing', speed);
 }
 
@@ -58,9 +61,10 @@ Executor.prototype.step = function() {
     this.steps = true;
 }
 
-/* nastavi rychlost animacie, vacsia speed= dlhsie animacie... */
+/* nastavi rychlost animacie, vacsia speed= rychlejsie animacie */
 Executor.prototype.setAnimationSpeed = function(speed) {
     this.animSpeed = speed;
+    console.log(speed);
 }
 
 /* Hlavny loop */
@@ -141,7 +145,7 @@ Executor.prototype.mainLoop = function() {
         if (!this.nextAction) {
             this.currentAction=false;
             var speed = this.animSpeed;
-            this.currentAnimation=new AnimationInfo('standing', currentTime, currentTime + this.interpreter.robot.animationLength('standing')*speed);
+            this.currentAnimation=new AnimationInfo('standing', currentTime, currentTime + this.interpreter.robot.animationLength('standing')/speed);
             this.interpreter.robot.stopAnimation(this.currentAnimation.anim);
             this.interpreter.robot.playAnimation('standing', speed);
         }
@@ -184,7 +188,7 @@ Executor.prototype.mainLoop = function() {
                      //start new animation
                     var speed = this.animSpeed;                    
                     this.interpreter.robot.stopAnimation(this.currentAnimation.anim);
-                    this.currentAnimation=new AnimationInfo(ret.command.command, currentTime, currentTime + this.interpreter.robot.animationLength(ret.command.command)*speed);
+                    this.currentAnimation=new AnimationInfo(ret.command.command, currentTime, currentTime + this.interpreter.robot.animationLength(ret.command.command)/speed);
                     this.interpreter.robot.playAnimation(ret.command.command, speed);
                     if (ret.command.command=='put') {
                         //pridame tehlicku do sveta
@@ -215,11 +219,12 @@ Executor.prototype.mainLoop = function() {
                 this.currentAction=false;
                 var speed = this.animSpeed;               
                 this.interpreter.robot.stopAnimation(this.currentAnimation.anim);
-                this.currentAnimation=new AnimationInfo('standing', currentTime, currentTime + this.interpreter.robot.animationLength('standing')*speed);
+                this.currentAnimation=new AnimationInfo('standing', currentTime, currentTime + this.interpreter.robot.animationLength('standing')/speed);
                 this.interpreter.robot.playAnimation('standing', speed);
             }
         }
     }  
     this.scene.render();
+    this.interpreter.robot.mixer.update(this.clock.getDelta());
     requestAnimationFrame(this.mainLoop.bind(this));
 }

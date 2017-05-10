@@ -50,6 +50,10 @@ window.onload = function() {
         editor.deleteMarker();
     };
     
+    speed_slider.onchange = function() {
+        executor.setAnimationSpeed(speed_slider.value);
+    }
+    
     //nacita ulozeny kod, skor testovacie
     if (typeof(Storage) !== "undefined") {
         var savedcode = localStorage.getItem('savedcode');

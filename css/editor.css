@@ -3,7 +3,7 @@
 	width: calc(40vw - 10px); 
 	height: 80vh;
 	position: relative;
-	overflow: hidden;
+	overflow: visible;
 	/*background-color: #DCDCDC;*/
 	background-color: white;
 	/*min-width: 216px;*/
@@ -17,7 +17,12 @@
 	width: 100%;
 	font-size: 1em;
 	position: absolute;
-	top: 35px;
+	top: 35px;    
+}
+
+#editor-panel {
+    max-height: 35px;
+    overflow:auto;
 }
 
 #editor-panel button {
@@ -31,6 +36,12 @@
 	border-width: 0;	
 	background-color: #F6F6F6;
 	border: 1px solid grey;
+	float: left;
+}
+
+#editor-panel input {
+    position: relative;
+    top: 5px;
 	float: left;
 }
 

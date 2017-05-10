@@ -58,6 +58,7 @@
 					<button type="button" disabled id="pause_button" title="Pozastav"><i class="fa fa-pause" aria-hidden="true"></i></button>
                     <button type="button" disabled id="restart_button" title="Odznova"><i class="fa fa-refresh" aria-hidden="true"></i></button>
 					<button type="button" disabled id="stop_button" title="Zastav"><i class="fa fa-stop" aria-hidden="true"></i></button>
+                    <input type="range" disabled id="speed_slider" name="Rýchlosť animácie" min="1" max="100" value="0" step="0.1"/>
 					
 				</div>
 				<div id="editor"></div>
@@ -78,6 +79,7 @@
             var pause_button = document.getElementById("pause_button"); pause_button.disabled=true;
             var restart_button = document.getElementById("restart_button"); restart_button.disabled=true;
             var stop_button = document.getElementById("stop_button"); stop_button.disabled=true;
+            var speed_slider = document.getElementById("speed_slider"); speed_slider.disabled=true; speed_slider.value=1;
 
 			var editor = ace.edit("editor");
             editor.deleteMarker = function () {

@@ -7,6 +7,8 @@ function Robot() {
     this.bag = new Bag(); 
     this.maxjumpup = 1;
     this.maxjumpdown = 1;
+    this.animations = {};
+    this.mixer;
 }
 
 /* Nastavi robota
@@ -105,27 +107,45 @@ Robot.prototype.putBrick = function(color) {
     this.bag.putBrick(color);
 }
 
-/* Vytvory mesh a prida ho do sceny scene */
+/* Vytvory mesh a animacie a prida ho do sceny scene */
 
 Robot.prototype.createMesh = function(scene) {
-    this.mesh = new THREE.Mesh (this.geometry, this.materials);
+    //this.mesh = new THREE.SkinnedMesh (this.geometry, this.materials, false);
+    for (var i=0; i<this.materials.length; i++) this.materials[i].skinning = true;
+    this.mesh = new THREE.Mesh (this.geometry, this.materials);    
+    this.mixer = new THREE.AnimationMixer(this.mesh);
     this.mesh.position.set(this.x+0.5, 0.1*this.z, -this.y-0.5);
     this.mesh.rotation.y = this.o*Math.PI / 2;
     this.mesh.castShadow = true;
+    if (this.geometry.hasOwnProperty('animations')) {
+        for (var i=0; i<this.geometry.animations.length; i++) {
+            this.animations[this.geometry.animations[i].name] = mixer.clipAction(this.geometry.animations[i]);
+            this.animations[this.geometry.animations[i].name].loop=false;
+            this.animations[this.geometry.animations[i].name].clampWhenFinished = true;
+        }
+    }
     scene.add(this.mesh);
-    
 }
 
 /* Animacie, su v geometry */
 
 Robot.prototype.animationLength = function(anim) {
-    return 500;
+    if (this.animations.hasOwnProperty(anim)) {
+        return this.animations[anim].data.length*1000;
+    }
+    return 1000;
 }
 
 Robot.prototype.playAnimation = function(anim, speed) {
     console.log('new anim started: ' + anim); 
+    if (this.animations.hasOwnProperty(anim)) {
+        this.animations[anim].timeScale = speed;
+        this.animations[anim].play();
+    }
 }
 
 Robot.prototype.stopAnimation = function(anim) {
-
+    if (this.animations.hasOwnProperty(anim)) {
+        this.animations[anim].stop();
+    }
 }
