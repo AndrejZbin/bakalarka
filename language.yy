@@ -86,11 +86,11 @@ NUMBER [0-9]+
 
 %start code
 
-%nonassoc IF_THEN
+%nonassoc THEN
 %nonassoc ELSE
 
-%left OR
-%left AND
+%right OR
+%right AND
 %left EQUALS NOTEQUALS
 %left LT GR '>' '<'
 %left '+' '-'
@@ -330,7 +330,7 @@ command : colorvarassign
                 }
             }];
         }
-        | IF condition THEN command %prec IF_THEN
+        | IF condition THEN command
         {
             $$ = [{
                     'command' : 'if',

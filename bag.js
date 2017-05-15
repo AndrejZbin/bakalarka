@@ -120,3 +120,30 @@ EmptyBag.prototype.takeBrick = function(color) {
 EmptyBag.prototype.putBrick = function(color) {
     
 }
+
+function OneBag() {
+    this.red=false;
+    this.green=false;
+    this.blue=false;
+}
+
+OneBag.prototype = new Bag();
+
+OneBag.prototype.hasBrick = function() {
+    return (this.red || this.green || this.blue);
+}
+
+OneBag.prototype.hasColor = function(color) {
+    return this[color];
+}
+
+OneBag.prototype.takeBrick = function(color) {
+    this[color]=false;
+}
+
+OneBag.prototype.putBrick = function(color) {
+    this.red=false;
+    this.green=false;
+    this.blue=false;
+    this[color]=true;
+}

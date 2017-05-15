@@ -56,9 +56,9 @@ Executor.prototype.pause = function() {
 
 /* Spustenie dalsieho prikazu */
 Executor.prototype.step = function() {
-    if(this.currentAction) return;
-    this.nextAction = true;
     this.steps = true;
+    if(!this.currentAction) this.nextAction = true;
+    
 }
 
 /* nastavi rychlost animacie, vacsia speed= rychlejsie animacie */

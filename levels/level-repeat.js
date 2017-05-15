@@ -39,7 +39,7 @@ LevelRepeatStepPlace.prototype.check = function (world_, robot_) {
 }
 
 LevelRepeatStepPlace.prototype.taskHTML = `
-    Pomocou príkazu OPAKUJ môžeme robotovi príkázať vykonať aj viacej príkazov. Stačí, keď všetky príkazy, ktoré chceme aby robot opakoval dáme medzi zátvorky { a }<br>
+    Pomocou príkazu OPAKUJ môžeme robotovi príkázať vykonať aj viacej príkazov. Stačí, keď všetky príkazy, ktoré chceme aby robot opakoval, dáme medzi zátvorky { a }<br>
     Napríklad ak chceme, aby robot 5x zobral zafarbené tehličky zo zeme a potom ho hneď položil naspäť, môžeme napísať OPAKUJ 5 {ZOBER POLOZ CERVENA}<br>
     V tejto úlohe musí robot spraviť 5 krokov dopredu, ale predtým, ako spraví krok, musí zo zeme zobrať jednu zafarbenú tehličku.
 `;
@@ -90,7 +90,7 @@ LevelRepeatStepTurn.prototype.check = function (world_, robot_) {
 }
 
 LevelRepeatStepTurn.prototype.taskHTML = `
-    V tejto úlohe musí robot presť na červenú tehličku <br>
+    V tejto úlohe musí robot prejsť na červenú tehličku. <br>
     Dostaň robota na zafarbenú tehličku. Skús napísať každý z príkazov KROK a OTOC len raz.
 `;
 
@@ -125,4 +125,37 @@ LevelRepeatStepPlaceTurn.prototype.taskHTML = `
     Môže sa rozhodnúť, že predtým, ako spraví krok, zoberie len jednu zafarbenú tehličku. V tom prípadne však musí spraviť až 2 okruhy. <br>
     Alebo pred každým krokom zoberie oboje tehličky. Riešenie je na tebe. Nezabudni použiť príkaz OPAKUJ.<br>
     Skús napísať každý z príkazov KROK, ZOBER a OTOC len raz.
+`;
+
+function LevelRepeatStairs() {
+
+}
+
+LevelRepeatStairs.prototype = new Level();
+
+LevelRepeatStairs.prototype.build = function (world_, robot_) {
+    world_.build(5,1);
+    robot_.build(0,0,1,'right', new Bag(), 10, 10);
+    for (var i=0; i<10; i++) robot_.putBrick(this.bricks.red.color);
+}
+
+LevelRepeatStairs.prototype.check = function (world_, robot_) {
+    correct=(world_.height(0,0)==0);
+    for (var i=1; i<5; i++) {
+        if (world_.height(i,0)-1!=world_.height(i-1,0)) {
+            correct=false;
+            break;
+        }
+    }
+    return {correct:correct, message:'Schody nie sú postavené správne'};
+}
+
+LevelRepeatStairs.prototype.taskHTML = `
+    Robot má pri sebe 10 červených tehličiek. Chcel by postaviť schody<br>
+    Tam, kde robot začína, nepoložíme žiadnu tehličku. <br>
+    Na druhom políčku má byť položená jedna zafarbená tehlička. <br>
+    Na nasledujúcom 2 potom 3 a nakoniec 4 zafarbené tehličky. <br>
+    Pomôž robotovi postaviť schody. Použi príkaz OPAKUJ.
+    
+    
 `;
